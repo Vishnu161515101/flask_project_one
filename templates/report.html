@@ -11,14 +11,19 @@
            <td>Name</td>
            <td>Number</td>
            <td>S.Id</td>
+           <td>Edit</td>
+           <td>Delete</td>
         </tr>
        
-
-      {% for x in d: %}
+      
+      {% for serial,x in d: %}
         <tr>
+            <td>{{serial}}</td>
             <td>{{x.1}}</td>
             <td>{{x.2}}</td>
             <td>{{x.3}}</td>
+            <td><a href='/edit?num={{x.3}}'>edit</a></td>
+            <td><a href='/delete?num={{x.3}}'>Delete</a></td>
         </tr>
       {% endfor %}
   

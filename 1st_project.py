@@ -49,7 +49,8 @@ def report():
                 sql1="select * from flask_table"
                 db1.execute(sql1)
                 data=db1.fetchall()
-                return render_template('reprot.html',d=data)
+                data_with_serial = [(i+1, item) for i, item in enumerate(data)]
+                return render_template('report.html',d=data_with_serial)
                 # return 'succefully inserted'
 
             except Exception:
