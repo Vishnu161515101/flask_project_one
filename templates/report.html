@@ -1,0 +1,36 @@
+<html> 
+ <head> 
+   <title>Flask Static Demo</title> 
+ </head> 
+ <body> 
+  <center>
+   
+    <table border="1">
+        <tr>
+           <td>So:no</td>
+           <td>Name</td>
+           <td>Number</td>
+           <td>S.Id</td>
+        </tr>
+       
+
+      {% for x in d: %}
+        <tr>
+            <td>{{x.1}}</td>
+            <td>{{x.2}}</td>
+            <td>{{x.3}}</td>
+        </tr>
+      {% endfor %}
+  
+
+
+    </table>
+    <br>
+    <input type="submit" value="submit" >
+</form>
+
+
+</center>
+
+ </body> 
+</html> 
