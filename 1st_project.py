@@ -56,6 +56,65 @@ def report():
             except Exception:
                 return "error is accure"
                 # return fname+' '+Number+' '+Id_e  
+            
+
+
+@app.route("/edit/<num>")
+def edit(num):
+            #edit_no=request.form['num']
+            # return num
+            try:
+                db_mysql=pymysql.connect(host='localhost',user='root',password='',db='vishnu')
+                db1=db_mysql.cursor()
+                sql1="select * from flask_table where id={}".format(num)
+                db1.execute(sql1)
+                data=db1.fetchall()
+                data_with_serial = [(i+1, item) for i, item in enumerate(data)]
+                return render_template('edit_templates.html',d=data_with_serial)
+                # return num
+
+            except Exception:
+                return "error is accure"
+                # return fname+' '+Number+' '+Id_e  
+
+
+@app.route("/update" ,methods=["POST"])
+def update():
+    fname=request.form['f_name']
+    Number=request.form['Number']
+    Id_e=request.form['Id_e']
+    Id_e2=request.form['Id_e1']
+    try:
+        db_mysql=pymysql.connect(host='localhost',user='root',password='',db='vishnu')
+        db1=db_mysql.cursor()
+        sql="update flask_table set name='{}',number='{}',id_f='{}' where id='{}'".format(fname,Number,Id_e,Id_e2)
+        db1.execute(sql)
+        db_mysql.commit()
+        return 'succefully Updated'
+        # return sql
+
+    except Exception:
+        return "error is accure"
+    # return fname+' '+Number+' '+Id_e
+
+
+
+@app.route("/delete/<num>")
+def delete(num):
+            #edit_no=request.form['num']
+            # return num
+            try:
+                db_mysql=pymysql.connect(host='localhost',user='root',password='',db='vishnu')
+                db1=db_mysql.cursor()
+                sql1="delete from flask_table where id={}".format(num)
+                db1.execute(sql1)
+                db_mysql.commit()
+                return "succefully deleted"
+                # return num
+
+            except Exception:
+                return "error is accure"
+
 
 if __name__== '__main__':
     app.run(debug=True)
