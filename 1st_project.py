@@ -1,4 +1,4 @@
-from flask import Flask 
+from flask import Flask,redirect 
 from flask import render_template 
 from flask import request
 import pymysql
@@ -34,7 +34,8 @@ def store():
         sql="insert into flask_table(name,number,id_f)values('{}','{}','{}')".format(fname,Number,Id_e)
         db1.execute(sql)
         db_mysql.commit()
-        return 'succefully inserted'
+        return "<script>alert('success'); window.location.href = '/vishnu1';</script>"
+        # return redirect("/vishnu1")
 
     except Exception:
         return "error is accure"
@@ -90,7 +91,11 @@ def update():
         sql="update flask_table set name='{}',number='{}',id_f='{}' where id='{}'".format(fname,Number,Id_e,Id_e2)
         db1.execute(sql)
         db_mysql.commit()
-        return 'succefully Updated'
+        # return '<script>alert("Date Updated success"); window.location.href = "/report";</script>'
+        return "<script>alert('Date Updated success'); window.location.href = '/report';</script>"
+        # return 'succefully Updated
+        # '
+        # return redirect("/report")
         # return sql
 
     except Exception:
@@ -109,7 +114,7 @@ def delete(num):
                 sql1="delete from flask_table where id={}".format(num)
                 db1.execute(sql1)
                 db_mysql.commit()
-                return "succefully deleted"
+                return "<script>alert('Data Deleted success'); window.location.href = '/report';</script>"
                 # return num
 
             except Exception:
