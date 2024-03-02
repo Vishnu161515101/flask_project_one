@@ -2,6 +2,7 @@ from flask import Flask,redirect
 from flask import render_template 
 from flask import request
 import pymysql
+import pandas as pd
 
 
 
@@ -40,6 +41,13 @@ def vishnu1():
 @app.route("/employee_entry")
 def employee_entry():
      return render_template('employee_entry_page.html')
+
+
+@app.route("/upload_data1")
+def upload_data1():
+     return render_template('upload_data.html')
+
+
 
 
 @app.route("/store" ,methods=["POST"])
@@ -153,6 +161,33 @@ def employee_store():
      except Exception:
                 return "error is accure"
      
+@app.route('/upload', methods=['POST'])
+def upload():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file:
+            # Read Excel file into a DataFrame
+           
+                df = pd.read_excel(file)
+                 # Access columns by index using iloc method
+                column1_index = 0  # Index of Column1
+                column2_index = 1  # Index of Column2
+                column3_index = 2  # Index of Column3
+                
+                # Get column values as separate variables
+                column1 = df.iloc[:, column1_index].tolist()
+                column2 = df.iloc[:, column2_index].tolist()
+                column3 = df.iloc[:, column3_index].tolist()
+                
+                #Concatenate values from the columns
+                concatenated_values = column1 + column2 + column3
+                # sql="insert into all_the_employee_name(fname,mname,lname)values('{}','{}','{}')".format(column1,column2,column3)
+                return concatenated_values
+                # return f"Column 1: {column1}"
+        
+                # return str(concatenated_values)  # Convert to string to return as response
+    return 'No file uploaded or something went wrong.'
+
 
 if __name__== '__main__':
     app.run(debug=True)
