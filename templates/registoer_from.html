@@ -1,0 +1,70 @@
+<html> 
+ <head> 
+   <title>Flask Static Demo</title> 
+   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+ </head> 
+ <script>
+        function myFunction() {
+            var f_name = document.getElementById('f_name').value;
+            var E_mail = document.getElementById('E_mail').value;
+            var Passwordss = document.getElementById('Passwordss').value;
+            
+            // Create a FormData object to store the form data
+            var formData = new FormData();
+            formData.append('f_name', f_name);
+            formData.append('E_mail', E_mail);
+            formData.append('Passwordss', Passwordss);
+            
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    var response = xmlhttp.responseText;
+                    // Process the response here
+                    document.getElementById('message').value = response;
+                }
+            };
+            // Open the request with the POST method and specify the URL
+            xmlhttp.open("POST", '/create_user_name'); // Replace '/create_user_name' with the appropriate URL
+            // Send the request with the form data
+            xmlhttp.send(formData);
+        }
+    </script>
+
+
+ <body> 
+  <center>
+    <form >
+    <table border="1">
+        <tr>
+            <spam>Enter Your Name</spam>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type='text' name='f_name' id='f_name' >
+        </tr>
+        <br>
+        <br>
+        <tr>
+            <spam>Enter Your E-Mail</spam>&nbsp;&nbsp;&nbsp;&nbsp;<input type='text' name='E_mail' id='E_mail'>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="hidden" id="message" value="this email already exists"></td>
+        </tr>
+        <br>
+        <br>
+        <tr>
+            <spam>Enter Your Password</spam>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type='password' name='Passwordss' id='Passwordss'>
+        </tr>
+
+    </table>
+   
+    <br>
+    <input type="button" value="submit"  onclick="myFunction()">
+</form>
+
+<div id="message"></div>
+
+
+
+
+</center>
+
+ </body> 
+</html> 

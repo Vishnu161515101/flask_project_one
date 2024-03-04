@@ -3,7 +3,8 @@ from flask import render_template
 from flask import request
 import pymysql
 import pandas as pd
-
+import bcrypt
+import re
 
 
 app = Flask(__name__)  
@@ -161,33 +162,137 @@ def employee_store():
      except Exception:
                 return "error is accure"
      
+# @app.route('/upload', methods=['POST'])
+# def upload():
+#     if request.method == 'POST':
+#         print(request.files['file'])
+#         f = request.files['file']
+#         data_xls = pd.read_excel(f)
+#         return data_xls.to_html()
+
+# @app.route('/upload', methods=['POST'])
+# def upload():
+#     if request.method == 'POST':
+#         file = request.files['file']
+#         if file:
+#             # Read Excel file into a DataFrame
+#             df = pd.read_excel(file)
+            
+#             column1_value = row['Column1'].strip()
+            
+#             # Iterate over rows in the DataFrame and insert data into the database
+#             for index, row in df.iterrows():
+#                  return  row['column1_value']
+            
+              
+            
+#             return 'Data inserted successfully into the database.'
+    
+#     return 'No file uploaded or something went wrong.'
+
 @app.route('/upload', methods=['POST'])
 def upload():
     if request.method == 'POST':
         file = request.files['file']
         if file:
             # Read Excel file into a DataFrame
-           
-                df = pd.read_excel(file)
-                 # Access columns by index using iloc method
-                column1_index = 0  # Index of Column1
-                column2_index = 1  # Index of Column2
-                column3_index = 2  # Index of Column3
+            df = pd.read_excel(file)
+            
+            # Iterate over rows in the DataFrame
+            for index, row in df.iterrows():
+                #  result = "The value is: " + row
+                 result1 = "The value is: " + str(index)
+                 return result1
+                # Access and assign values from each row to variables
+                # column1_value = row['Column1']
+                # column2_value = row['Column2']
+                # column3_value = row['Column3']
+                # # Continue with other columns as needed
                 
-                # Get column values as separate variables
-                column1 = df.iloc[:, column1_index].tolist()
-                column2 = df.iloc[:, column2_index].tolist()
-                column3 = df.iloc[:, column3_index].tolist()
+                # # Print or use the assigned values as needed
+                # print(f"Row {index + 1}: Column1={column1_value}, Column2={column2_value}, Column3={column3_value}")
                 
-                #Concatenate values from the columns
-                concatenated_values = column1 + column2 + column3
-                # sql="insert into all_the_employee_name(fname,mname,lname)values('{}','{}','{}')".format(column1,column2,column3)
-                return concatenated_values
-                # return f"Column 1: {column1}"
-        
-                # return str(concatenated_values)  # Convert to string to return as response
+                # You can also use these values to perform further processing
+                
+            # return 'Data printed successfully.'
+    
     return 'No file uploaded or something went wrong.'
 
+@app.route("/Register")
+def Register():
+    #  return 'this is Register from'
+     return render_template('registoer_from.html')
+
+
+
+#----------------------this main code i am doing --------------------
+# @app.route("/create_user_name",methods=['POST'])
+# def create_user_name():
+     
+#     #  return 'this is create_user_name'
+#      Name=request.form['f_name']
+#      Email=request.form['E_mail']
+#      Password=request.form['Passwordss']
+#      password1 = Password
+#      hashed_password = bcrypt.hashpw(password1.encode('utf-8'), bcrypt.gensalt())
+    
+#      try:
+        
+ 
+#     #  except Exception:
+#     #       return 'it has been filed'
+#         db_cursor.execute("SELECT email_id FROM login WHERE email_id = '{}'".format(Email))
+#         user = db_cursor.fetchone()
+#         if user:
+#                 # data = user[0] 
+#                 # return data
+#                 return "<script>alert('Already Email Id Execisted please try another email id');window.location.href='/Register';</script>"
+#         else:
+#             sql = "INSERT INTO login (name, email_id, password) VALUES (%s, %s, %s)"
+#             # Execute the SQL query with parameters
+#             db_cursor.execute(sql, (Name, Email, hashed_password.decode('utf-8')))
+#             # Commit the changes
+#             db_mysql.commit()
+#             return "<script>alert('data succefully connectd');window.location.href='/Register';</script>"
+#      except Exception as e:
+#         # Log the exception for debugging purposes
+#         print("An error occurred:", str(e))
+#         # You can also raise the exception to propagate it further
+#         # raise
+#         return 'An error occurred: {}'.format(str(e))
+
+@app.route("/create_user_name",methods=['POST'])
+def create_user_name():
+     
+    #  return 'this is create_user_name'
+     Name=request.form['f_name']
+     Email=request.form['E_mail']
+     Password=request.form['Passwordss']
+     password1 = Password
+     hashed_password = bcrypt.hashpw(password1.encode('utf-8'), bcrypt.gensalt())
+
+     try:
+        db_cursor.execute("SELECT email_id FROM login WHERE email_id = '{}'".format(Email))
+        user = db_cursor.fetchone()
+        if user:
+                data = user[0] 
+                return data
+                # return "<script>alert('Already Email Id Execisted please try another email id');window.location.href='/Register';</script>"
+        else:
+            sql = "INSERT INTO login (name, email_id, password) VALUES (%s, %s, %s)"
+            # Execute the SQL query with parameters
+            db_cursor.execute(sql, (Name, Email, hashed_password.decode('utf-8')))
+            # Commit the changes
+            db_mysql.commit()
+            return "<script>alert('User already exists');</script>"
+          
+          
+     except Exception as e:
+            # Log the exception for debugging purposes
+        print("An error occurred:", str(e))
+        # You can also raise the exception to propagate it further
+        # raise
+        return 'An error occurred: {}'.format(str(e))
 
 if __name__== '__main__':
     app.run(debug=True)
