@@ -1,10 +1,37 @@
-<html> 
- <head> 
-   <title>Flask Static Demo</title> 
-   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Submission</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+</head>
+<body>
+    <center>
+        <form>
+            <table border="1">
+                <tr>
+                    <td><span>Enter Your Name</span></td>
+                    <td><input type='text' name='f_name' id='f_name'></td>
+                </tr>
+                <tr>
+                    <td><span>Enter Your E-Mail</span></td>
+                    <td><input type='text' name='E_mail' id='E_mail'></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><span id="message"></span></td>
+                </tr>
+                <tr>
+                    <td><span>Enter Your Password</span></td>
+                    <td><input type='password' name='Passwordss' id='Passwordss'></td>
+                </tr>
+            </table>
+            <br>
+            <input type="button" value="Submit" onclick="myFunction()">
+        </form>
+    </center>
 
- </head> 
- <script>
+    <script>
         function myFunction() {
             var f_name = document.getElementById('f_name').value;
             var E_mail = document.getElementById('E_mail').value;
@@ -21,7 +48,8 @@
                 if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                     var response = xmlhttp.responseText;
                     // Process the response here
-                    document.getElementById('message').value = response;
+                    document.getElementById('message').innerText = response;
+                    console.log(response);
                 }
             };
             // Open the request with the POST method and specify the URL
@@ -30,41 +58,5 @@
             xmlhttp.send(formData);
         }
     </script>
-
-
- <body> 
-  <center>
-    <form >
-    <table border="1">
-        <tr>
-            <spam>Enter Your Name</spam>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type='text' name='f_name' id='f_name' >
-        </tr>
-        <br>
-        <br>
-        <tr>
-            <spam>Enter Your E-Mail</spam>&nbsp;&nbsp;&nbsp;&nbsp;<input type='text' name='E_mail' id='E_mail'>
-        </tr>
-        <tr>
-            <td colspan="2"><input type="hidden" id="message" value="this email already exists"></td>
-        </tr>
-        <br>
-        <br>
-        <tr>
-            <spam>Enter Your Password</spam>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type='password' name='Passwordss' id='Passwordss'>
-        </tr>
-
-    </table>
-   
-    <br>
-    <input type="button" value="submit"  onclick="myFunction()">
-</form>
-
-<div id="message"></div>
-
-
-
-
-</center>
-
- </body> 
-</html> 
+</body>
+</html>

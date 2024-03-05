@@ -272,11 +272,12 @@ def create_user_name():
      hashed_password = bcrypt.hashpw(password1.encode('utf-8'), bcrypt.gensalt())
 
      try:
-        db_cursor.execute("SELECT email_id FROM login WHERE email_id = '{}'".format(Email))
+        db_cursor.execute("SELECT name,email_id FROM login WHERE email_id = '{}'".format(Email))
         user = db_cursor.fetchone()
         if user:
                 data = user[0] 
-                return data
+                data1 = user[1] 
+                return 'data is alredy exstied'
                 # return "<script>alert('Already Email Id Execisted please try another email id');window.location.href='/Register';</script>"
         else:
             sql = "INSERT INTO login (name, email_id, password) VALUES (%s, %s, %s)"
@@ -284,7 +285,7 @@ def create_user_name():
             db_cursor.execute(sql, (Name, Email, hashed_password.decode('utf-8')))
             # Commit the changes
             db_mysql.commit()
-            return "<script>alert('User already exists');</script>"
+            return "user is created"
           
           
      except Exception as e:
