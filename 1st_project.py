@@ -1,3 +1,4 @@
+from flask import *
 from flask import Flask,redirect 
 from flask import render_template 
 from flask import request
@@ -5,9 +6,14 @@ import pymysql
 import pandas as pd
 import bcrypt
 import re
-
+import os
+# from flask import Flask, session
+from flask_session import Session
 
 app = Flask(__name__)  
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
 
 # @app.route("/")
 # def hello_world():
@@ -294,6 +300,103 @@ def create_user_name():
         # You can also raise the exception to propagate it further
         # raise
         return 'An error occurred: {}'.format(str(e))
+     
+
+@app.route('/entry_page1')
+def entry_page1():
+     return render_template('registoer_from1.html')
+
+
+@app.route('/register',methods=['POST'])
+def register():
+    message = ''
+    if request.method == 'POST' and 'name' in request.form and 'password' in request.form and 'email' in request.form:
+            
+            userName = request.form['name']
+            password = request.form['password']
+            # password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+            email = request.form['email']
+            try:
+                sql="SELECT name,email_id FROM login WHERE email_id = '{}'".format(email)
+                db_cursor.execute(sql)
+                user = db_cursor.fetchone()
+                if user:
+                     message = 'Account already exists !'
+                elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+                     message = 'Invalid email address !'
+                elif not userName or not password or not email:
+                     message = 'Please fill out the form !'
+                else:
+                    sql = "INSERT INTO login (name, email_id, password) VALUES (%s, %s, %s)"
+                    # Execute the SQL query with parameters
+                    # db_cursor.execute(sql, (userName, email, password.decode('utf-8')))
+                    db_cursor.execute(sql, (userName, email, password))
+                    # Commit the changes
+                    db_mysql.commit()
+                    #  return 'done'
+                    message = 'You have successfully registered !'
+            
+            except Exception as e:
+                 print("An error occurred:", str(e))
+                 # You can also raise the exception to propagate it further
+                 # raise
+                 return 'An error occurred: {}'.format(str(e))
+    elif request.method == 'POST':
+        message = 'Please fill out the form !'
+    return render_template('registoer_from1.html', message=message)
+
+                # return 'done'
+
+
+
+@app.route('/login1')
+def login1():
+     return render_template('login_entry.html')
+
+
+
+@app.route('/login1212',methods=['POST'])
+def login1212():
+      message = ''
+      if request.method == 'POST' and  'password' in request.form and 'email' in request.form:
+           email = request.form['email']
+           password = request.form['password']
+           try:
+                sql="SELECT * FROM login WHERE email_id = '{}' and  password='{}'".format(email,password)
+                db_cursor.execute(sql)
+                user = db_cursor.fetchone()
+                if user:
+                     
+                      session['loggedin'] = True
+                      session['name'] = user['name']
+                      session['email_id'] = user['email_id']
+                      session['password'] = user['password']
+                    #   return 'done' 
+                      message = 121212
+                      return render_template('admin_page.html', message=message)
+                else:
+                     message = 'Please enter correct email / password !'
+
+           except Exception as e:
+                 print("An error occurred:", str(e))
+                 # You can also raise the exception to propagate it further
+                 # raise
+                 return 'An error occurred: {}'.format(str(e))
+      return render_template('registoer_from1.html', message=message)
+           
+@app.route('/logout')
+def logout():
+     return 'succefuul logout'
+
+
+
+
+
+
+
+
+
+
 
 if __name__== '__main__':
     app.run(debug=True)
